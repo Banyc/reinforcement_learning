@@ -1,3 +1,4 @@
+use plotly::{common::Mode, Plot, Scatter};
 use value_iteration::{gambler::Gambler, value_iteration::ValueIteration};
 
 fn main() {
@@ -12,5 +13,33 @@ fn main() {
     println!("(s, a)");
     for s in value_iteration.task().state_space() {
         println!("({}, {:?})", s, value_iteration.max_v_a(&v, &s).1);
+    }
+
+    {
+        let mut plot = Plot::new();
+        let mut x = vec![];
+        let mut y = vec![];
+        for s in value_iteration.task().state_space() {
+            x.push(s);
+            y.push(v[&s]);
+        }
+        let trace = Scatter::new(x, y).name("V(s)").mode(Mode::Lines);
+        plot.add_trace(trace);
+        plot.show();
+    }
+    {
+        let mut plot = Plot::new();
+        let mut x = vec![];
+        let mut y = vec![];
+        for s in value_iteration.task().state_space() {
+            let a = value_iteration.max_v_a(&v, &s).1;
+            for a in a {
+                x.push(s);
+                y.push(a);
+            }
+        }
+        let trace = Scatter::new(x, y).name("A(s)").mode(Mode::Markers);
+        plot.add_trace(trace);
+        plot.show();
     }
 }
