@@ -26,11 +26,7 @@ where
         this
     }
     // type Value = HashMap<State, f64>;
-    pub fn value_iteration(&self, theta: f64) -> HashMap<State, f64> {
-        let mut v = HashMap::new();
-        for s in self.task.state_space() {
-            v.insert(s, 0.0);
-        }
+    pub fn value_iteration(&self, theta: f64, v: &mut HashMap<State, f64>) {
         for s in self.task.terminal_state_space() {
             v.insert(s, 0.0);
         }
@@ -45,7 +41,6 @@ where
                 delta = f64::max(delta, f64::abs(new_v - old_v));
             }
         }
-        v
     }
 
     pub fn max_v_a(&self, v: &HashMap<State, f64>, s: &State) -> (f64, Vec<Action>) {
