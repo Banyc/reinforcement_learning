@@ -1,6 +1,10 @@
 use std::collections::HashMap;
 
-pub trait ValueIterationTask<State, Action> {
+pub trait ValueIterationTask<State, Action>
+where
+    State: std::hash::Hash + std::cmp::Eq,
+    Action: Copy,
+{
     fn gamma(&self) -> f64;
     fn probabilities(&self, s: &State, a: &Action) -> Vec<Probability<State>>;
     fn action_space(&self, s: &State) -> Box<dyn Iterator<Item = Action>>;
