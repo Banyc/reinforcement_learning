@@ -1,4 +1,4 @@
-use crate::value_iteration::{Probability, ValueIterationTask};
+use crate::value_iteration::{Possibility, ValueIterationTask};
 
 const GAMMA: f64 = 1.0;
 const HEAD_PROBABILITY: f64 = 0.4;
@@ -9,35 +9,35 @@ impl ValueIterationTask<State, Action> for Gambler {
         GAMMA
     }
 
-    fn probabilities(&self, s: &State, a: &Action) -> Vec<Probability<State>> {
+    fn possibilities(&self, s: &State, a: &Action) -> Vec<Possibility<State>> {
         if s < a {
             panic!();
         }
 
-        let mut probabilities = vec![];
+        let mut possibilities = vec![];
 
         {
             let s_ = i32::min(s + a, 100);
-            let probability = Probability {
+            let possibility = Possibility {
                 probability: HEAD_PROBABILITY,
                 next_state: s_,
                 reward: if s_ == 100 { 1.0 } else { 0.0 },
             };
-            probabilities.push(probability);
+            possibilities.push(possibility);
         }
 
         {
             let s_ = s - a;
-            let probability = Probability {
+            let probability = Possibility {
                 probability: 1.0 - HEAD_PROBABILITY,
                 next_state: s_,
                 reward: 0.0,
             };
-            probabilities.push(probability);
+            possibilities.push(probability);
         }
 
-        assert!(probabilities.iter().map(|x| x.probability).sum::<f64>() > 0.99);
-        probabilities
+        assert!(possibilities.iter().map(|x| x.probability).sum::<f64>() > 0.99);
+        possibilities
     }
 
     fn action_space(&self, s: &State) -> Box<dyn Iterator<Item = Action>> {

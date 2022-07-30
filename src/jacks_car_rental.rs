@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::value_iteration::{Probability, ValueIterationTask};
+use crate::value_iteration::{Possibility, ValueIterationTask};
 
 const GAMMA: f64 = 0.9;
 
@@ -10,8 +10,8 @@ impl ValueIterationTask<State, Action> for JacksCarRental {
         GAMMA
     }
 
-    fn probabilities(&self, s: &State, a: &Action) -> Vec<Probability<State>> {
-        let mut probabilities = vec![];
+    fn possibilities(&self, s: &State, a: &Action) -> Vec<Possibility<State>> {
+        let mut possibilities = vec![];
 
         for in0 in poisson_3() {
             for out0 in poisson_3() {
@@ -21,7 +21,7 @@ impl ValueIterationTask<State, Action> for JacksCarRental {
                         let s1_ = (s.1 as i32 + *a) as u32;
                         let out0_ = if out0.0 > s0_ { 0 } else { out0.0 };
                         let out1_ = if out1.0 > s1_ { 0 } else { out1.0 };
-                        let p = Probability {
+                        let possibility = Possibility {
                             probability: in0.1 * in1.1 * out0.1 * out1.1,
                             next_state: (
                                 u32::min(20, s0_ - out0_ + in0.0),
@@ -29,15 +29,15 @@ impl ValueIterationTask<State, Action> for JacksCarRental {
                             ),
                             reward: (out0_ + out1_) as f64 * 10.0 + i32::abs(*a) as f64 * -2.0,
                         };
-                        probabilities.push(p);
+                        possibilities.push(possibility);
                     }
                 }
             }
         }
 
-        // let sum = probabilities.iter().map(|x| x.probability).sum::<f64>();
+        // let sum = possibilities.iter().map(|x| x.probability).sum::<f64>();
         // assert!(sum > 0.99);
-        probabilities
+        possibilities
     }
 
     fn action_space(&self, s: &State) -> Box<dyn Iterator<Item = Action>> {

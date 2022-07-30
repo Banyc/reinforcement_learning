@@ -6,7 +6,7 @@ where
     Action: Copy,
 {
     fn gamma(&self) -> f64;
-    fn probabilities(&self, s: &State, a: &Action) -> Vec<Probability<State>>;
+    fn possibilities(&self, s: &State, a: &Action) -> Vec<Possibility<State>>;
     fn action_space(&self, s: &State) -> Box<dyn Iterator<Item = Action>>;
     fn state_space(&self) -> Box<dyn Iterator<Item = State>>;
     fn terminal_state_space(&self) -> Box<dyn Iterator<Item = State>>;
@@ -52,7 +52,7 @@ where
         let mut max_a = vec![];
         for a in self.task.action_space(s) {
             let mut expected_v = 0.0;
-            let probabilities = self.task.probabilities(s, &a);
+            let probabilities = self.task.possibilities(s, &a);
             for probability in probabilities {
                 expected_v += probability.probability
                     * (probability.reward + self.task.gamma() * v[&probability.next_state]);
@@ -73,7 +73,7 @@ where
     }
 }
 
-pub struct Probability<State> {
+pub struct Possibility<State> {
     pub probability: f64,
     pub next_state: State,
     pub reward: f64,
