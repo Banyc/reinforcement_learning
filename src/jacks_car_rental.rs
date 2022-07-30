@@ -13,21 +13,21 @@ impl ValueIterationTask<State, Action> for JacksCarRental {
     fn possibilities(&self, s: &State, a: &Action) -> Vec<Possibility<State>> {
         let mut possibilities = vec![];
 
+        let s0 = (s.0 as i32 - *a) as u32;
+        let s1 = (s.1 as i32 + *a) as u32;
         for in0 in poisson_3() {
-            for out0 in poisson_3() {
+            for to_out0 in poisson_3() {
                 for in1 in poisson_2() {
-                    for out1 in poisson_4() {
-                        let s0_ = (s.0 as i32 - *a) as u32;
-                        let s1_ = (s.1 as i32 + *a) as u32;
-                        let out0_ = if out0.0 > s0_ { 0 } else { out0.0 };
-                        let out1_ = if out1.0 > s1_ { 0 } else { out1.0 };
+                    for to_out1 in poisson_4() {
+                        let out0 = u32::min(s0, to_out0.0);
+                        let out1 = u32::min(s1, to_out1.0);
                         let possibility = Possibility {
-                            probability: in0.1 * in1.1 * out0.1 * out1.1,
+                            probability: in0.1 * in1.1 * to_out0.1 * to_out1.1,
                             next_state: (
-                                u32::min(20, s0_ - out0_ + in0.0),
-                                u32::min(20, s1_ - out1_ + in1.0),
+                                u32::min(20, s0 - out0 + in0.0),
+                                u32::min(20, s1 - out1 + in1.0),
                             ),
-                            reward: (out0_ + out1_) as f64 * 10.0 + i32::abs(*a) as f64 * -2.0,
+                            reward: (out0 + out1) as f64 * 10.0 + i32::abs(*a) as f64 * -2.0,
                         };
                         possibilities.push(possibility);
                     }
