@@ -43,7 +43,9 @@ fn main() {
         for s in value_iteration.task().state_space() {
             let a = value_iteration.max_v_a(&v, &s).1;
             println!("({:?}, {:?})", s, a);
-            writeln!(file, "{}, {}, {:?}", s.0, s.1, a).unwrap();
+            for a in a {
+                writeln!(file, "{}, {}, {}", s.0, s.1, a).unwrap();
+            }
         }
     }
 }
