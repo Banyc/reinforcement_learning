@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use plotly::{common::Mode, Plot, Scatter};
 use reinforcement_learning::monte_carlo::{gambler::Gambler, monte_carlo::MonteCarlo};
 
-const EPSILON: f64 = 0.01;
+const EPSILON: f64 = 0.1;
 const NUM_EPISODES: usize = 10_000;
 
 fn main() {
