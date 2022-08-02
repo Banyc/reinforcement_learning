@@ -2,11 +2,7 @@ use std::collections::HashMap;
 
 use rand::{seq::SliceRandom, Rng};
 
-pub trait MonteCarloTask<State, Action>
-where
-    State: std::hash::Hash + std::cmp::Eq,
-    Action: Copy,
-{
+pub trait MonteCarloTask<State, Action> {
     fn gamma(&self) -> f64;
     fn action_space(&self, s: &State) -> Box<dyn Iterator<Item = Action>>;
     fn action_space_len(&self, s: &State) -> usize;
@@ -16,11 +12,7 @@ where
     fn in_terminal_state_space(&self, s: &State) -> bool;
 }
 
-pub struct MonteCarlo<State, Action>
-where
-    State: std::hash::Hash + std::cmp::Eq,
-    Action: Copy,
-{
+pub struct MonteCarlo<State, Action> {
     task: Box<dyn MonteCarloTask<State, Action>>,
 }
 
