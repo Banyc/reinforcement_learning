@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use plotly::{common::Mode, Plot, Scatter};
-use value_iteration::{gambler::Gambler, value_iteration::ValueIteration};
+use reinforcement_learning::value_iteration::{gambler::Gambler, value_iteration::ValueIteration};
 
 fn main() {
     let task = Gambler;
@@ -44,7 +44,7 @@ fn main() {
                 y.push(a);
             }
         }
-        let trace = Scatter::new(x, y).name("A(s)").mode(Mode::Markers);
+        let trace = Scatter::new(x, y).name("\\pi(s)").mode(Mode::Markers);
         plot.add_trace(trace);
         plot.show();
     }

@@ -5,7 +5,9 @@ use std::{
     path,
 };
 
-use value_iteration::{jacks_car_rental::JacksCarRental, value_iteration::ValueIteration};
+use reinforcement_learning::value_iteration::{
+    jacks_car_rental::JacksCarRental, value_iteration::ValueIteration,
+};
 
 const VALUE_OUTPUT_FILE: &str = "jacks_car_rental.value.csv";
 const ACTION_OUTPUT_FILE: &str = "jacks_car_rental.action.csv";

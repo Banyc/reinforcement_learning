@@ -1,4 +1,4 @@
-use crate::value_iteration::{Possibility, ValueIterationTask};
+use super::value_iteration::{Possibility, ValueIterationTask};
 
 const GAMMA: f64 = 1.0;
 const HEAD_PROBABILITY: f64 = 0.4;

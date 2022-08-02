@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::value_iteration::{Possibility, ValueIterationTask};
+use super::value_iteration::{Possibility, ValueIterationTask};
 
 const GAMMA: f64 = 0.9;
 

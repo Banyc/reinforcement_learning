@@ -257,6 +257,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "reinforcement_learning"
+version = "0.1.0"
+dependencies = [
+ "plotly",
+ "rand",
+]
+
+[[package]]
 name = "ryu"
 version = "1.0.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -330,13 +338,6 @@ name = "unicode-ident"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "15c61ba63f9235225a22310255a29b806b907c9b8c964bcbd0a2c70f3f2deea7"
-
-[[package]]
-name = "value_iteration"
-version = "0.1.0"
-dependencies = [
- "plotly",
-]
 
 [[package]]
 name = "version_check"
