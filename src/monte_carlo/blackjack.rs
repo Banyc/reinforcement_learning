@@ -1,4 +1,4 @@
-use rand::Rng;
+use rand::{seq::SliceRandom, Rng};
 
 use super::monte_carlo::MonteCarloTask;
 
@@ -32,7 +32,7 @@ impl MonteCarloTask<State, Action> for Blackjack {
     fn random_state(&self) -> State {
         let mut rng = rand::thread_rng();
         State {
-            dealer: rng.gen_range(2..11 + 1),
+            dealer: gen_card(),
             me: rng.gen_range(12..21 + 1),
             useful_ace: rng.gen(),
             after_stick: false,
@@ -40,12 +40,11 @@ impl MonteCarloTask<State, Action> for Blackjack {
     }
 
     fn transit(&self, s: &State, a: &Action) -> (State, f64) {
-        let mut rng = rand::thread_rng();
         let mut s_next = (*s).clone();
         let mut r = 0.0;
         match a {
             Action::Hit => {
-                let card = rng.gen_range(2..11 + 1);
+                let card = gen_card();
                 s_next.me += card;
                 if s_next.me > 21 {
                     if s_next.useful_ace {
@@ -60,7 +59,7 @@ impl MonteCarloTask<State, Action> for Blackjack {
             }
             Action::Stick => {
                 s_next.after_stick = true;
-                let card = rng.gen_range(2..11 + 1);
+                let card = gen_card();
                 s_next.dealer += card;
                 if s_next.dealer > 21 {
                     if card == 11 || s.dealer == 11 {
@@ -84,14 +83,18 @@ impl MonteCarloTask<State, Action> for Blackjack {
     fn in_terminal_state_space(&self, s: &State) -> bool {
         if s.after_stick {
             true
-        } else if s.dealer >= 21 {
-            true
-        } else if s.me >= 21 {
+        } else if s.me > 21 {
             true
         } else {
             false
         }
     }
+}
+
+fn gen_card() -> u32 {
+    *vec![2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11]
+        .choose(&mut rand::thread_rng())
+        .unwrap()
 }
 
 #[derive(Clone, Copy, Hash, PartialEq, Eq, Debug)]
