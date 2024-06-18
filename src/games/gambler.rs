@@ -2,7 +2,7 @@ use rand::Rng;
 
 use crate::{
     monte_carlo::MonteCarloTask,
-    value_iteration::value_iteration::{Possibility, ValueIterationTask},
+    value_iteration::{Possibility, ValueIterationTask},
 };
 
 const GAMMA: f64 = 1.0;

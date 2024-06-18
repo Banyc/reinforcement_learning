@@ -26,8 +26,7 @@ where
     Action: Copy,
 {
     pub fn new(task: Box<dyn ValueIterationTask<State, Action>>) -> Self {
-        let this = Self { task };
-        this
+        Self { task }
     }
     // type Value = HashMap<State, f64>;
     pub fn value_iteration(&self, theta: f64, v: &mut HashMap<State, f64>) {
@@ -40,7 +39,7 @@ where
             delta = 0.0;
             for s in self.task.state_space() {
                 let old_v = v[&s];
-                let (new_v, _) = self.max_v_a(&v, &s);
+                let (new_v, _) = self.max_v_a(v, &s);
                 v.insert(s, new_v);
                 delta = f64::max(delta, f64::abs(new_v - old_v));
             }
@@ -68,8 +67,8 @@ where
         (max_v, max_a)
     }
 
-    pub fn task(&self) -> &Box<dyn ValueIterationTask<State, Action>> {
-        &self.task
+    pub fn task(&self) -> &dyn ValueIterationTask<State, Action> {
+        self.task.as_ref()
     }
 }
 
