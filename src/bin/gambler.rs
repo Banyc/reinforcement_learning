@@ -1,7 +1,9 @@
 use std::collections::HashMap;
 
 use plotly::{common::Mode, Plot, Scatter};
-use reinforcement_learning::value_iteration::{gambler::Gambler, value_iteration::ValueIteration};
+use reinforcement_learning::{
+    games::gambler::Gambler, value_iteration::value_iteration::ValueIteration,
+};
 
 fn main() {
     let task = Gambler;

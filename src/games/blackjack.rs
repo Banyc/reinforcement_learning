@@ -1,6 +1,6 @@
 use rand::{seq::SliceRandom, Rng};
 
-use crate::{monte_carlo::monte_carlo::MonteCarloTask, q_learning::QLearningTask};
+use crate::{monte_carlo::MonteCarloTask, q_learning::QLearningTask};
 
 const GAMMA: f64 = 1.0;
 

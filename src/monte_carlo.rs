@@ -70,11 +70,11 @@ where
                     action: step.action,
                 };
                 {
-                    let c_old = c.get(&s_a).or(Some(&0.0)).unwrap();
+                    let c_old = c.get(&s_a).unwrap_or(&0.0);
                     c.insert(s_a, c_old + w);
                 }
                 {
-                    let q_old = q.get(&s_a).or(Some(&0.0)).unwrap();
+                    let q_old = q.get(&s_a).unwrap_or(&0.0);
                     let shift = w / c.get(&s_a).unwrap() * (g - q_old);
                     q.insert(s_a, q_old + shift);
                 }
@@ -112,8 +112,7 @@ where
                     state: *s,
                     action: a,
                 })
-                .or(Some(&0.0))
-                .unwrap();
+                .unwrap_or(&0.0);
             if max_v < v {
                 max_a = vec![a];
             }
@@ -123,10 +122,6 @@ where
             max_v = f64::max(max_v, v);
         }
         (max_v, max_a)
-    }
-
-    pub fn task(&self) -> &Box<dyn MonteCarloTask<State, Action>> {
-        &self.task
     }
 }
 

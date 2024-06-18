@@ -22,8 +22,7 @@ where
     Action: Copy + std::hash::Hash + std::cmp::Eq,
 {
     pub fn new(task: Box<dyn QLearningTask<State, Action>>) -> Self {
-        let this = Self { task };
-        this
+        Self { task }
     }
 
     pub fn value_evaluation(
@@ -53,7 +52,7 @@ where
                         state: s,
                         action: a,
                     };
-                    let q_sa = *q.get(&sa).or(Some(&0.0)).unwrap();
+                    let q_sa = *q.get(&sa).unwrap_or(&0.0);
                     let (next_max_q, _) = self.max_q_a(q, &s_next);
                     let new_q_sa = q_sa + alpha * (r + self.task.gamma() * next_max_q - q_sa);
                     q.insert(sa, new_q_sa);
@@ -77,8 +76,7 @@ where
                     state: *s,
                     action: a,
                 })
-                .or(Some(&0.0))
-                .unwrap();
+                .unwrap_or(&0.0);
             if max_v < v {
                 max_a = vec![a];
             }
@@ -88,10 +86,6 @@ where
             max_v = f64::max(max_v, v);
         }
         (max_v, max_a)
-    }
-
-    pub fn task(&self) -> &Box<dyn QLearningTask<State, Action>> {
-        &self.task
     }
 }
 
