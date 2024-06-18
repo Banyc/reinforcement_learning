@@ -22,8 +22,7 @@ where
     Action: Copy + std::hash::Hash + std::cmp::Eq,
 {
     pub fn new(task: Box<dyn MonteCarloTask<State, Action>>) -> Self {
-        let this = Self { task };
-        this
+        Self { task }
     }
 
     pub fn policy_evaluation(

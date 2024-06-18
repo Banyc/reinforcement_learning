@@ -5,7 +5,7 @@ use std::{
     path,
 };
 
-use reinforcement_learning::q_learning::{blackjack::Blackjack, q_learning::QLearning};
+use reinforcement_learning::{games::blackjack::Blackjack, q_learning::QLearning};
 
 const EPSILON: f64 = 0.1;
 const ALPHA: f64 = 0.1;
