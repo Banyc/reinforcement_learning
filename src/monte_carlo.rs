@@ -2,6 +2,8 @@ use std::collections::HashMap;
 
 use rand::{seq::SliceRandom, Rng};
 
+use crate::{max_value_by_actions, StateActionPair};
+
 pub trait MonteCarloTask<State, Action> {
     fn gamma(&self) -> f64;
     fn action_space(&self, s: &State) -> Box<dyn Iterator<Item = Action>>;
@@ -62,7 +64,11 @@ where
                 }
                 let best_actions = {
                     // Set the best actions to the policy
-                    let (_, a) = self.max_value_by_actions(value, &step.state);
+                    let (_, a) = max_value_by_actions(
+                        value,
+                        &step.state,
+                        self.task.action_space(&step.state),
+                    );
                     policy.insert(step.state, a);
                     policy.get(&step.state).unwrap()
                 };
@@ -114,41 +120,6 @@ where
         }
         episode
     }
-
-    pub fn max_value_by_actions(
-        &self,
-        value: &HashMap<StateActionPair<State, Action>, f64>,
-        s: &State,
-    ) -> (f64, Vec<Action>) {
-        let mut max_v = f64::MIN;
-        let mut max_a = vec![];
-        for a in self.task.action_space(s) {
-            let v = *value
-                .get(&StateActionPair {
-                    state: *s,
-                    action: a,
-                })
-                .unwrap_or(&0.0);
-            if max_v < v {
-                max_a = vec![a];
-            }
-            if max_v == v {
-                max_a.push(a);
-            }
-            max_v = f64::max(max_v, v);
-        }
-        (max_v, max_a)
-    }
-}
-
-#[derive(PartialEq, Eq, Hash, Copy, Clone)]
-pub struct StateActionPair<State, Action>
-where
-    State: Copy + std::hash::Hash + std::cmp::Eq,
-    Action: Copy + std::hash::Hash + std::cmp::Eq,
-{
-    pub state: State,
-    pub action: Action,
 }
 
 struct Step<State, Action> {
